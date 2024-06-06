@@ -60,4 +60,14 @@ declare namespace API {
       invitationCode?: string;
     };
   }
+  declare namespace Agent {
+    type ChatBot = {
+      userID: string;
+      nickname: string;
+      faceURL: string;
+      email: string;
+      llmname: string;
+      model: string;
+    };
+  }
 }

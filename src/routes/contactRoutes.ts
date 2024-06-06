@@ -27,6 +27,13 @@ const contactRoutes = [
       return { Component: NewFriends };
     },
   },
+  {
+    path: "botList",
+    async lazy() {
+      const { BotList } = await import("@/pages/contact/bots");
+      return { Component: BotList };
+    },
+  },
 ];
 
 export default contactRoutes;

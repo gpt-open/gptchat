@@ -1,0 +1,26 @@
+.wmde-markdown p,
+.wmde-markdown blockquote,
+.wmde-markdown ul,
+.wmde-markdown ol,
+.wmde-markdown dl,
+.wmde-markdown table,
+.wmde-markdown pre,
+.wmde-markdown details {
+  margin-bottom: 0 !important;
+  list-style: auto !important;
+}
+
+.wmde-markdown h1,
+.wmde-markdown h2,
+.wmde-markdown h3,
+.wmde-markdown h4,
+.wmde-markdown h5,
+.wmde-markdown h6 {
+  margin: 0 !important;
+  margin-left: 12px !important;
+}
+
+.wmde-markdown li > p {
+  margin: 0 !important;
+  transform: translateY(-20px);
+}

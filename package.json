@@ -1,5 +1,5 @@
 {
-  "name": "OpenIM-Demo",
+  "name": "OpenIM-GPT",
   "version": "1.0.0",
   "main": "dist-electron/main/index.js",
   "description": "OpenIM Electron Demo.",
@@ -76,6 +76,7 @@
     "@ckeditor/ckeditor5-editor-classic": "^41.3.1",
     "@ckeditor/ckeditor5-essentials": "^41.3.1",
     "@ckeditor/ckeditor5-image": "^41.3.1",
+    "@ckeditor/ckeditor5-mention": "^41.4.2",
     "@ckeditor/ckeditor5-paragraph": "^41.3.1",
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@ckeditor/ckeditor5-theme-lark": "^41.3.1",
@@ -84,6 +85,7 @@
     "@livekit/components-styles": "^1.0.12",
     "@openim/electron-client-sdk": "^1.0.2",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@uiw/react-markdown-preview": "^5.1.1",
     "ahooks": "^3.7.7",
     "antd": "^5.6.0",
     "axios": "^1.4.0",

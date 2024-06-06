@@ -106,6 +106,8 @@ export function useHistoryMessageList() {
           : "",
         conversationID: conversationID ?? "",
       });
+      console.log(data.messageList);
+
       setLoadState((preState) => ({
         initLoading: false,
         hasMore: data.messageList.length !== 0,

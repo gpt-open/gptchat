@@ -20,6 +20,7 @@ export const IMSDK = instance;
 export const MainContentWrap = () => {
   const updateAppSettings = useUserStore((state) => state.updateAppSettings);
   const getAppConfigByReq = useUserStore((state) => state.getAppConfigByReq);
+  const getAgentData = useUserStore((state) => state.getAgentData);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,6 +61,7 @@ export const MainContentWrap = () => {
 
     initSettingStore();
     getAppConfigByReq();
+    getAgentData();
   }, []);
 
   return <Outlet />;

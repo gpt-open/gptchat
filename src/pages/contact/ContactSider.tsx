@@ -4,6 +4,7 @@ import i18n, { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import chatbot from "@/assets/images/contact/chatbot.svg";
 import group_notifications from "@/assets/images/contact/group_notifications.png";
 import my_friends from "@/assets/images/contact/my_friends.png";
 import my_groups from "@/assets/images/contact/my_groups.png";
@@ -31,6 +32,11 @@ const Links = [
     label: t("placeholder.myGroup"),
     icon: my_groups,
     path: "/contact/myGroups",
+  },
+  {
+    label: t("placeholder.botList"),
+    icon: chatbot,
+    path: "/contact/botList",
   },
 ];
 
@@ -99,10 +105,10 @@ const ContactSider = () => {
                   <img
                     alt={item.label}
                     src={item.icon}
-                    className="mr-3 h-10.5 w-10.5 rounded-md"
+                    className="h-10.5 w-10.5 rounded-md"
                   />
                 </Badge>
-                <div className="text-sm">{item.label}</div>
+                <div className="ml-3 text-sm">{item.label}</div>
               </li>
             );
           })}

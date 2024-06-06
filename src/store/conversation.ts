@@ -17,6 +17,7 @@ const CONVERSATION_SPLIT_COUNT = 500;
 
 export const useConversationStore = create<ConversationStore>()((set, get) => ({
   conversationList: [],
+  currentChatBot: undefined,
   currentConversation: undefined,
   unReadCount: 0,
   currentGroupInfo: undefined,
@@ -93,7 +94,12 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
       get().getCurrentGroupInfoByReq(conversation.groupID);
       get().getCurrentMemberInGroupByReq(conversation.groupID);
     }
-    set(() => ({ currentConversation: { ...conversation } }));
+    set(() => ({
+      currentConversation: { ...conversation },
+      currentChatBot: useUserStore
+        .getState()
+        .agentData.chatBots.find((bot) => bot.userID === conversation.userID),
+    }));
   },
   getUnReadCountByReq: async () => {
     try {

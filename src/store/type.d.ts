@@ -22,11 +22,13 @@ export interface UserStore {
   selfInfo: BusinessUserInfo;
   appConfig: AppConfig;
   appSettings: AppSettings;
+  agentData: AgentData;
   updateSyncState: (syncing: IMConnectState) => void;
   updateSelfInfo: (info: Partial<BusinessUserInfo>) => void;
   getSelfInfoByReq: () => void;
   getAppConfigByReq: () => Promise<void>;
   updateAppSettings: (settings: Partial<AppSettings>) => void;
+  getAgentData: () => Promise<void>;
   userLogout: (force?: boolean) => Promise<void>;
 }
 
@@ -42,12 +44,17 @@ export interface AppSettings {
   closeAction: "miniSize" | "quit";
 }
 
+export interface AgentData {
+  chatBots: API.Agent.ChatBot[];
+}
+
 export type LocaleString = "zh-CN" | "en-US";
 
 export type ConversationListUpdateType = "push" | "filter";
 
 export interface ConversationStore {
   conversationList: ConversationItem[];
+  currentChatBot?: API.Agent.ChatBot;
   currentConversation?: ConversationItem;
   unReadCount: number;
   currentGroupInfo?: GroupItem;

@@ -79,3 +79,39 @@
 .ck-editor__top {
   display: none;
 }
+
+.ck-list__item {
+  .ant-avatar {
+    text-align: center !important;
+  }
+  .ant-avatar-string {
+    color: inherit !important;
+    text-align: center !important;
+  }
+}
+
+.ck-mentions {
+  --ck-mention-list-max-height: 125px;
+}
+
+.ck-balloon-panel_visible {
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden !important;
+}
+
+.ck-list__item .ck-on {
+  background-color: #f0f0f0 !important;
+}
+
+.ck-content .mention {
+  --ck-color-mention-background: transparent;
+  --ck-color-mention-text: var(--primary);
+}
+
+.mention-item .ant-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+}

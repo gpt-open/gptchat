@@ -1,4 +1,4 @@
-import { Layout, Tooltip } from "antd";
+import { Layout, Space, Tag, Tooltip } from "antd";
 import clsx from "clsx";
 import i18n, { t } from "i18next";
 import { SessionType } from "open-im-sdk-wasm";
@@ -7,6 +7,7 @@ import { memo, useEffect, useRef } from "react";
 import group_member from "@/assets/images/chatHeader/group_member.png";
 import launch_group from "@/assets/images/chatHeader/launch_group.png";
 import settings from "@/assets/images/chatHeader/settings.png";
+import chatbot from "@/assets/images/contact/chatbot.svg";
 import OIMAvatar from "@/components/OIMAvatar";
 import { OverlayVisibleHandle } from "@/hooks/useOverlayVisible";
 import { useConversationStore, useUserStore } from "@/store";
@@ -51,6 +52,7 @@ const ChatHeader = () => {
   const inGroup = useConversationStore((state) =>
     Boolean(state.currentMemberInGroup?.groupID),
   );
+  const chatBot = useConversationStore((state) => state.currentChatBot);
 
   // locale re render
   useUserStore((state) => state.appSettings.locale);
@@ -114,7 +116,7 @@ const ChatHeader = () => {
           />
           <div
             className={clsx(
-              "ml-3 flex !h-10.5 flex-1 flex-col justify-between overflow-hidden",
+              "ml-3 flex !h-12 flex-1 flex-col overflow-hidden",
               isNotification && "!justify-center",
             )}
           >
@@ -126,6 +128,15 @@ const ChatHeader = () => {
                 <img width={20} src={group_member} alt="member" />
                 <span>{currentGroupInfo?.memberCount}</span>
               </div>
+            )}
+            {chatBot && (
+              <Space>
+                <img src={chatbot} width={24} alt="" />
+                <Tag
+                  bordered={false}
+                  color="processing"
+                >{`${chatBot.llmname} ${chatBot.model}`}</Tag>
+              </Space>
             )}
           </div>
         </div>

@@ -36,7 +36,7 @@ const createAxiosInstance = (baseURL: string, imToken = true) => {
           },
         });
       }
-      if (res.data.errCode !== 0) {
+      if (res.data.errCode !== 0 && res.data.retcode !== 0) {
         return Promise.reject(res.data);
       }
       return res.data;

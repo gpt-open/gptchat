@@ -31,9 +31,15 @@ const ChatContent = ({ isNotificationSession }: { isNotificationSession: boolean
   }, [isNotificationSession]);
 
   const scrollToBottom = (behavior?: "smooth" | "auto") => {
+    console.log("scrollToBottom");
+
     setTimeout(() => {
-      virtuoso.current?.scrollToIndex({
-        index: 999999,
+      // virtuoso.current?.scrollToIndex({
+      //   index: 999999,
+      //   behavior,
+      // });
+      virtuoso.current?.scrollTo({
+        top: 99999999999,
         behavior,
       });
     });

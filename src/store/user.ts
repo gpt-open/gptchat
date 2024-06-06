@@ -1,6 +1,7 @@
 import { t } from "i18next";
 import { create } from "zustand";
 
+import { getChatBots } from "@/api/agent";
 import {
   BusinessAllowType,
   BusinessUserInfo,
@@ -14,12 +15,15 @@ import { clearIMProfile, getLocale, setLocale } from "@/utils/storage";
 
 import { useContactStore } from "./contact";
 import { useConversationStore } from "./conversation";
-import { AppConfig, AppSettings, IMConnectState, UserStore } from "./type";
+import { AgentData, AppConfig, AppSettings, IMConnectState, UserStore } from "./type";
 
 export const useUserStore = create<UserStore>()((set, get) => ({
   syncing: "success",
   selfInfo: {} as BusinessUserInfo,
   appConfig: {} as AppConfig,
+  agentData: {
+    chatBots: [],
+  },
   appSettings: {
     locale: getLocale(),
     closeAction: "miniSize",
@@ -64,6 +68,16 @@ export const useUserStore = create<UserStore>()((set, get) => ({
       setLocale(settings.locale);
     }
     set((state) => ({ appSettings: { ...state.appSettings, ...settings } }));
+  },
+  getAgentData: async () => {
+    try {
+      const {
+        data: { bot_list },
+      } = await getChatBots();
+      set((state) => ({ agentData: { ...state.agentData, chatBots: bot_list } }));
+    } catch (error) {
+      console.error("get agent data err");
+    }
   },
   userLogout: async (force = false) => {
     if (!force) await IMSDK.logout();

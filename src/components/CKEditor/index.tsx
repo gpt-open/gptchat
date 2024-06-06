@@ -3,8 +3,11 @@ import "./index.scss";
 import { ClassicEditor } from "@ckeditor/ckeditor5-editor-classic";
 import { Essentials } from "@ckeditor/ckeditor5-essentials";
 import { ImageInline, ImageInsert } from "@ckeditor/ckeditor5-image";
+import { ItemRenderer, Mention } from "@ckeditor/ckeditor5-mention";
+import { FeedCallback } from "@ckeditor/ckeditor5-mention/src/mentionconfig";
 import { Paragraph } from "@ckeditor/ckeditor5-paragraph";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { GroupMemberItem } from "open-im-sdk-wasm/lib/types/entity";
 import {
   forwardRef,
   ForwardRefRenderFunction,
@@ -12,8 +15,11 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+import ReactDOM from "react-dom/client";
 
+import MentionListItem, { MentionItem } from "./compts/MentionListItem";
 import EmojiAdapterPlugin from "./plugins/emojiAdapter";
+import MentionOutputAdapterPlugin from "./plugins/mentionOutputAdapter";
 
 export type CKEditorRef = {
   focus: (moveToEnd?: boolean) => void;
@@ -25,6 +31,7 @@ interface CKEditorProps {
   placeholder?: string;
   onChange?: (value: string) => void;
   onEnter?: () => void;
+  getFeedItems?: (keyword: string) => Promise<MentionItem[]>;
 }
 
 export interface EmojiData {
@@ -38,7 +45,7 @@ const keyCodes = {
 };
 
 const Index: ForwardRefRenderFunction<CKEditorRef, CKEditorProps> = (
-  { value, placeholder, onChange, onEnter },
+  { value, placeholder, onChange, onEnter, getFeedItems },
   ref,
 ) => {
   const ckEditor = useRef<ClassicEditor | null>(null);
@@ -111,6 +118,7 @@ const Index: ForwardRefRenderFunction<CKEditorRef, CKEditorProps> = (
 
           if (
             selection.focus?.nodeBefore &&
+            selection.focus?.nodeBefore.hasAttribute("mention") &&
             // @ts-ignore
             selection.focus?.nodeBefore.name === "emoji"
           ) {
@@ -144,14 +152,26 @@ const Index: ForwardRefRenderFunction<CKEditorRef, CKEditorProps> = (
       config={{
         placeholder,
         toolbar: [],
+        mention: {
+          feeds: [
+            {
+              marker: "@",
+              feed:
+                (getFeedItems as unknown as FeedCallback) ??
+                (() => Promise.resolve([])),
+              itemRenderer: customItemRenderer as unknown as ItemRenderer,
+              dropdownLimit: 100,
+            },
+          ],
+        },
         image: {
           toolbar: [],
           insert: {
             type: "inline",
           },
         },
-        plugins: [Essentials, Paragraph, ImageInline, ImageInsert],
-        extraPlugins: [EmojiAdapterPlugin],
+        plugins: [Essentials, Paragraph, ImageInline, ImageInsert, Mention],
+        extraPlugins: [EmojiAdapterPlugin, MentionOutputAdapterPlugin],
       }}
       onReady={(editor) => {
         ckEditor.current = editor;
@@ -167,3 +187,14 @@ const Index: ForwardRefRenderFunction<CKEditorRef, CKEditorProps> = (
 };
 
 export default memo(forwardRef(Index));
+
+function customItemRenderer(item: MentionItem) {
+  const container = document.createElement("div");
+
+  container.classList.add("mention-item");
+  container.id = `mention-list-item-id-${item.userID}`;
+
+  ReactDOM.createRoot(container).render(<MentionListItem item={item} />);
+
+  return container;
+}

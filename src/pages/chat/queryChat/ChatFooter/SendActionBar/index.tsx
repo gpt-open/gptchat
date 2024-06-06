@@ -13,6 +13,7 @@ import image from "@/assets/images/chatFooter/image.png";
 import rtc from "@/assets/images/chatFooter/rtc.png";
 import video from "@/assets/images/chatFooter/video.png";
 import { EmojiData } from "@/components/CKEditor";
+import { useConversationStore } from "@/store";
 
 import { SendMessageParams } from "../useSendMessage";
 import CallPopContent from "./CallPopContent";
@@ -74,6 +75,8 @@ const SendActionBar = ({
     emoji: false,
   });
 
+  const chatBot = useConversationStore((state) => state.currentChatBot);
+
   const closeAllPop = useCallback(
     () => setVisibleState({ rtc: false, emoji: false }),
     [],
@@ -93,7 +96,8 @@ const SendActionBar = ({
 
   return (
     <div className="flex items-center px-4.5 pt-2">
-      {sendActionList.map((action) => {
+      {sendActionList.map((action, idx) => {
+        if (Boolean(chatBot) && idx > 0) return null;
         const popProps: PopoverProps = {
           placement: action.placement as TooltipPlacement,
           content:

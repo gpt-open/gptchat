@@ -3,18 +3,11 @@ import calendar from "dayjs/plugin/calendar";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import { t } from "i18next";
-import default_group from "@/assets/images/contact/my_groups.png";
-import { v4 as uuidv4 } from "uuid";
 
-import {
-  CustomMessageType,
-  GroupSessionTypes,
-  SystemMessageTypes,
-} from "@/constants/im";
+import { GroupSessionTypes } from "@/constants/im";
 import { useConversationStore, useUserStore } from "@/store";
 import { useContactStore } from "@/store/contact";
 
-import { generateAvatar, secondsToTime } from "./common";
 import {
   AtTextElem,
   ConversationItem,
@@ -59,7 +52,9 @@ const linkWrap = ({
 }) => {
   return `<span class='link-el${
     fromAt ? "" : " member-el"
-  } max-w-[200px] truncate inline-block align-bottom' onclick='userClick("${userID}")'>${name}</span>`;
+  } max-w-[200px] truncate inline-block align-bottom'${
+    fromAt ? ` data-id=${userID}` : ` onclick=userClick("${userID}")`
+  }>${name}</span>`;
 };
 
 export const notificationMessageFormat = (msg: MessageItem) => {
@@ -204,6 +199,20 @@ export const formatMessageByType = (message?: MessageItem): string => {
     switch (message.contentType) {
       case MessageType.TextMessage:
         return message.textElem?.content;
+      case MessageType.AtTextMessage:
+        let mstr = message.atTextElem.text;
+        const pattern = /@\S+\s/g;
+        const arr = mstr.match(pattern);
+        arr?.map((a) => {
+          const member = (message.atTextElem.atUsersInfo ?? []).find(
+            (gm) => gm.atUserID === a.slice(1, -1),
+          );
+          if (member) {
+            const reg = new RegExp(a, "g");
+            mstr = mstr.replace(reg, `@${member.groupNickname} `);
+          }
+        });
+        return mstr;
       case MessageType.PictureMessage:
         return t("messageDescription.imageMessage");
       case MessageType.VideoMessage:
@@ -331,3 +340,24 @@ export const conversationSort = (conversationList: ConversationItem[]) => {
 
 export const isGroupSession = (sessionType?: SessionType) =>
   sessionType ? GroupSessionTypes.includes(sessionType) : false;
+
+export const formatAtText = (atel: AtTextElem) => {
+  let mstr = atel.text;
+  const pattern = /@\S+\b/g;
+  const arr = mstr.match(pattern);
+  const atUserList = atel.atUsersInfo ?? [];
+  arr?.map((match) => {
+    const member = atUserList.find((user) => user.atUserID === match.slice(1));
+    if (member) {
+      mstr = mstr.replace(
+        match,
+        linkWrap({
+          fromAt: true,
+          userID: member.atUserID,
+          name: `@${member.groupNickname}`,
+        }),
+      );
+    }
+  });
+  return mstr;
+};
