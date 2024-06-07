@@ -2,7 +2,9 @@ const protocol = window.location.protocol;
 const hostname = window.location.hostname;
 const isHttps = protocol === "https:";
 
-export const WS_URL = `${protocol}//${hostname}${isHttps ? "/msg_gateway" : ":10001"}`;
+export const WS_URL = `${isHttps ? "wss:" : "ws:"}//${hostname}${
+  isHttps ? "/msg_gateway" : ":10001"
+}`;
 export const API_URL = `${protocol}//${hostname}${isHttps ? "/api" : ":10002"}`;
 export const CHAT_URL = `${protocol}//${hostname}${isHttps ? "/chat" : ":10008"}`;
 export const AGENT_URL = `${protocol}//${hostname}${isHttps ? "/agent" : ":9000"}`;
